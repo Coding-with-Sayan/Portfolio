@@ -85,15 +85,21 @@
             <div class="container">
                 <div class="form-wrapper">
                     <h2>Get In Touch</h2>
-                    <form>
-                        <div class="input-group" action="https://formspree.io/f/xdawlplo" method="POST">
-                            <input type="text" placeholder="Name" required>
-                            <input type="email" placeholder="Email" required>
-                        </div>
-                        <textarea rows="5" placeholder="Your Message" required></textarea>
-                        <input type="hidden" name="_captcha" value="false">
-                        <button type="submit" class="btn primary">Send Message</button>
-                    </form>
+                    <form action="https://formspree.io/f/xdawlplo" method="POST">
+                       <div class="input-group">
+<input type="text" name="name" placeholder="Name" required>
+<input type="email" name="email" placeholder="Email" required>
+</div>
+
+<textarea name="message" rows="5" name="message" placeholder="Your Message" required></textarea>
+
+<input type="hidden" name="_captcha" value="false">
+
+<input type="hidden" name="_next" value="thankyou.html">
+
+<button type="submit" class="btn primary">Send Message</button>
+
+</form>
                 </div>
             </div>
         </section>
