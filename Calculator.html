@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statutory PF Calculator | HR Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        /* Stats Section */
+        .card-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat span {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+
+        /* Table Section */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #334155;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        input {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            width: 120px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .pf-val {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .info-text {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h2>Statutory Payroll Calculator</h2>
+
+    <div class="card-stats">
+        <div class="stat">Employees <span id="empCount">0</span></div>
+        <div class="stat">Total PF (Payable) <span id="totalPF">₹ 0</span></div>
+    </div>
+
+    <div class="table-container">
+        <table id="payrollTable">
+            <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Basic Salary (Monthly)</th>
+                    <th>PF Contribution (12%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sayan Bose</td>
+                    <td><input type="number" class="salary" value="30000" oninput="calculate()"></td>
+                    <td class="pf-val">₹ 0.00</td>
+                </tr>
+                <tr>
+                    <td>Soumo Basu</td>
+                    <td><input type="number" class="salary" value="12000" oninput="calculate()"></td>
+                    <td class="pf-val">₹ 0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="info-text">Note: Employee PF is calculated at 12% of Basic, capped at a wage ceiling of ₹15,000.</p>
+</div>
+
+<script>
+    /**
+     * Professional PF Calculation Function
+     * Logic: If Basic > 15000, PF = 1800 (12% of 15000)
+     * Else: PF = 12% of actual Basic
+     */
+    function calculate() {
+        const salaries = document.getElementsByClassName('salary');
+        const pfCells = document.getElementsByClassName('pf-val');
+        let grandTotalPF = 0;
+
+        for (let i = 0; i < salaries.length; i++) {
+            let basic = parseFloat(salaries[i].value) || 0;
+            let pfContribution = 0;
+
+            // Apply Indian Statutory Cap Logic
+            if (basic > 15000) {
+                pfContribution = 15000 * 0.12; // Capped at 1800
+            } else {
+                pfContribution = basic * 0.12;
+            }
+
+            // Update individual row cell
+            pfCells[i].innerText = "₹ " + pfContribution.toFixed(2);
+            
+            // Add to total
+            grandTotalPF += pfContribution;
+        }
+
+        // Update Dashboard Stats with Indian Number Formatting
+        document.getElementById('totalPF').innerText = "₹ " + grandTotalPF.toLocaleString('en-IN');
+        document.getElementById('empCount').innerText = salaries.length;
+    }
+
+    // Initialize calculation on page load
+    window.onload = calculate;
+</script>
+
+</body>
+</html>
